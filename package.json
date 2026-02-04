@@ -1,6 +1,6 @@
 {
   "name": "crm-medicall",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "CRM para RC MediCall",
   "main": "server.js",
   "scripts": {
