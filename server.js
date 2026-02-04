@@ -30,12 +30,20 @@ io.on('connection', (socket) => {
 
 // --- SQL Database Connection (SQLite) ---
 // Usamos SQLite por defecto. Para producción real en Cloud Run con persistencia, 
-// se recomienda cambiar 'dialect' a 'postgres' y usar una instancia de Cloud SQL.
-const sequelize = new Sequelize({
-    dialect: 'sqlite',
-    storage: './database.sqlite', // Archivo local de base de datos
-    logging: false // Desactivar logs de SQL en consola para limpieza
-});
+// --- SQL Database Connection (PostgreSQL / Cloud SQL) ---
+const sequelize = new Sequelize(
+  process.env.DB_NAME,      // crm_production
+  process.env.DB_USER,      // postgres
+  process.env.DB_PASSWORD,  // Medicall2026!
+  {
+    host: process.env.DB_HOST,
+    dialect: 'postgres',    // <--- AHORA SÍ: Usamos el motor correcto
+    logging: false,
+    dialectOptions: process.env.DB_HOST && process.env.DB_HOST.startsWith('/cloudsql') 
+      ? { socketPath: process.env.DB_HOST } // Magia para conectar con Google Cloud
+      : {} 
+  }
+);
 
 // --- Definición de Modelos SQL ---
 
